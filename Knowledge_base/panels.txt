@@ -1,0 +1,115 @@
+SOLAR PANELS
+
+Definition:
+
+A solar panel, also known as a photovoltaic (PV) panel, converts sunlight into electrical energy through the photovoltaic effect.
+
+How Solar Panels Work:
+
+1. Solar panels contain photovoltaic cells.
+2. These cells commonly use semiconductor materials such as silicon.
+3. Sunlight causes electrical charges to move within the cells.
+4. The generated electricity is direct current (DC).
+5. An inverter can convert DC electricity into alternating current (AC).
+
+Common Types:
+
+1. Monocrystalline
+2. Polycrystalline
+3. Thin-film
+
+Monocrystalline Panels:
+
+Monocrystalline panels are made using high-purity silicon and generally offer high efficiency.
+
+Advantages:
+- High efficiency
+- Good power output per unit area
+- Suitable for limited installation space
+- Long operating life
+
+Limitations:
+- Usually higher initial cost
+- Performance is affected by shading, temperature, orientation, and installation conditions
+
+Polycrystalline Panels:
+
+Polycrystalline panels are manufactured using multiple silicon crystal structures.
+
+Advantages:
+- Generally lower manufacturing cost
+- Reliable technology
+- Suitable for residential and commercial applications
+
+Limitations:
+- Generally lower efficiency than comparable modern monocrystalline panels
+- May require more installation area
+
+Thin-Film Panels:
+
+Thin-film panels use thin layers of photovoltaic material deposited onto a supporting surface.
+
+Advantages:
+- Lightweight options are available
+- Flexible designs may be possible
+- Useful for specialized applications
+
+Limitations:
+- Generally lower efficiency
+- May require more installation area
+
+Important Specifications:
+
+- Rated power output in watts (W)
+- Efficiency
+- Voltage
+- Current
+- Temperature coefficient
+- Dimensions
+- Weight
+- Operating temperature range
+- Warranty
+- Certifications
+
+Panel Wattage:
+
+Solar panels are available in different power ratings. Higher wattage does not automatically mean better performance. Panel selection should consider efficiency, available space, system design, quality, warranty, and compatibility.
+
+Factors Affecting Performance:
+
+- Sunlight availability
+- Orientation
+- Tilt angle
+- Shading
+- Dust and dirt
+- Temperature
+- Installation quality
+- System losses
+- Panel degradation
+
+Solar Panel Degradation:
+
+Solar panels gradually lose some power output over their operating life. The degradation rate depends on panel technology, manufacturer, environmental conditions, and product quality.
+
+Panel Selection:
+
+Selection should consider:
+
+- Required system capacity
+- Available installation area
+- Energy consumption
+- Panel efficiency
+- Panel wattage
+- Budget
+- Warranty
+- Manufacturer specifications
+- Environmental conditions
+- Compatibility with inverter and other components
+
+Customer Questions:
+
+Customers may ask about panel types, wattage, efficiency, number of panels required, lifespan, shading, performance, and panel selection.
+
+Important Limitation:
+
+Actual panel selection and system sizing should be verified by a qualified solar professional using electricity consumption, site conditions, installation area, equipment specifications, and applicable requirements.

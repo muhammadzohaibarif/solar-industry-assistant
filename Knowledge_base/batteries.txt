@@ -1,0 +1,60 @@
+SOLAR BATTERIES
+
+Definition:
+
+A solar battery stores electrical energy so that it can be used when solar generation is unavailable or when backup power is required.
+
+Main Uses:
+
+- Energy storage
+- Backup power
+- Night-time energy use
+- Supporting off-grid and hybrid systems
+- Reducing dependence on the grid where applicable
+
+Common Battery Types:
+
+1. Lead-acid batteries
+2. Lithium-ion batteries
+
+Lead-Acid:
+
+Lead-acid batteries are a traditional energy-storage technology. They can have a lower initial cost but generally require more maintenance and have different depth-of-discharge characteristics than lithium batteries.
+
+Lithium-Ion:
+
+Lithium-ion batteries are widely used in modern energy-storage systems. They generally offer high energy density, longer cycle life, and lower maintenance requirements compared with traditional lead-acid batteries.
+
+Important Specifications:
+
+- Battery capacity
+- Voltage
+- Usable energy
+- Depth of discharge
+- Cycle life
+- Charging requirements
+- Compatibility with inverter
+
+Battery Selection:
+
+Selection depends on:
+
+- Required backup time
+- Electrical loads
+- Energy consumption
+- System type
+- Budget
+- Available space
+- Inverter compatibility
+
+Backup Calculation:
+
+Required battery capacity depends on the power of the loads that need backup and the required backup duration.
+
+Customer Questions:
+
+Customers may ask about battery types, capacity, backup time, battery life, compatibility, installation, maintenance, and warranty.
+
+Important Limitation:
+
+Actual battery sizing and selection should be verified by a qualified solar professional using the complete electrical load and system design.

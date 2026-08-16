@@ -1,0 +1,108 @@
+SOLAR SYSTEM SIZING
+
+Definition:
+
+Solar system sizing is the process of estimating the required solar panel capacity, inverter capacity, battery capacity, and related components based on energy consumption, electrical loads, site conditions, and system requirements.
+
+Important Inputs:
+
+- Daily energy consumption
+- Peak load
+- Appliance load
+- Required backup duration
+- Available installation area
+- Solar resource
+- Grid availability
+- System type
+- Budget
+- Future expansion requirements
+
+Basic Solar Capacity Concept:
+
+Approximate solar capacity can be estimated using:
+
+Required Solar Capacity ≈ Daily Energy Consumption ÷ Peak Sun Hours
+
+A practical design should also account for system losses and other site-specific factors.
+
+Example:
+
+If daily consumption is 10 kWh and effective peak sun hours are approximately 5 hours:
+
+10 ÷ 5 = 2 kW
+
+This is only a basic conceptual estimate and is not a final system design.
+
+Panel Count:
+
+Approximate panel count can be estimated using:
+
+Number of Panels = Required Solar Capacity ÷ Panel Power
+
+Example:
+
+A 2 kW system using 500 W panels:
+
+2000 ÷ 500 = 4 panels
+
+Actual panel count should be adjusted according to system design and available products.
+
+Inverter Sizing:
+
+Inverter sizing should consider:
+
+- Maximum simultaneous load
+- Solar array capacity
+- Surge requirements
+- System type
+- Battery compatibility
+- Manufacturer specifications
+
+Battery Sizing:
+
+Battery sizing depends on:
+
+- Backup load
+- Required backup duration
+- Battery voltage
+- Usable battery capacity
+- Depth of discharge
+- System efficiency
+
+Basic Concept:
+
+Battery Energy Required ≈ Backup Load × Backup Time
+
+Actual battery capacity should include efficiency and allowable depth-of-discharge considerations.
+
+Load Assessment:
+
+A proper load assessment should identify:
+
+- Essential loads
+- Non-essential loads
+- Peak loads
+- Continuous loads
+- Starting or surge loads
+
+System Type:
+
+Sizing differs between:
+
+- On-grid systems
+- Off-grid systems
+- Hybrid systems
+
+Customer Questions:
+
+Customers may ask:
+
+- How many panels do I need?
+- What size inverter do I need?
+- What battery size do I need?
+- What solar system is suitable for my house?
+- How many kW are required?
+
+Important Limitation:
+
+The formulas in this document are basic estimation concepts. Final system sizing must be performed or verified by a qualified solar professional using actual load data, site conditions, solar resource, equipment specifications, applicable electrical requirements, and safety considerations.

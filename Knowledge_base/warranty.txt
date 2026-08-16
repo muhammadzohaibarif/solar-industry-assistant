@@ -1,0 +1,60 @@
+SOLAR WARRANTY
+
+Definition:
+
+A solar warranty is a manufacturer's or installer's commitment covering specified products or services for a defined period under stated terms and conditions.
+
+Common Warranty Categories:
+
+1. Product warranty
+2. Performance warranty
+3. Inverter warranty
+4. Battery warranty
+5. Installation workmanship warranty
+
+Panel Product Warranty:
+
+Covers specified manufacturing or material defects according to manufacturer terms.
+
+Panel Performance Warranty:
+
+May specify minimum expected power output over a defined period.
+
+Inverter Warranty:
+
+Covers specified inverter defects and failures according to manufacturer terms.
+
+Battery Warranty:
+
+Battery warranties may specify:
+
+- Warranty duration
+- Cycle limitations
+- Throughput limitations
+- Operating conditions
+- Depth-of-discharge conditions
+- Installation requirements
+
+Installation Warranty:
+
+An installer may provide a separate workmanship warranty covering installation-related issues.
+
+Important Warranty Conditions:
+
+Warranty coverage may depend on:
+
+- Proper installation
+- Correct operating conditions
+- Product registration
+- Maintenance requirements
+- Authorized service procedures
+- Environmental conditions
+- Manufacturer terms
+
+Customer Questions:
+
+Customers may ask about warranty duration, panel warranty, inverter warranty, battery warranty, installation warranty, and warranty claims.
+
+Important Limitation:
+
+Warranty terms vary by manufacturer, product, installer, country, and supplier. The chatbot should not promise warranty coverage without checking the actual warranty documentation.

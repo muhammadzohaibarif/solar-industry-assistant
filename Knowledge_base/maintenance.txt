@@ -1,0 +1,73 @@
+SOLAR SYSTEM MAINTENANCE
+
+Definition:
+
+Solar maintenance involves inspecting and servicing the solar system to help maintain safe and reliable operation.
+
+Common Maintenance Tasks:
+
+- Panel inspection
+- Panel cleaning when necessary
+- Cable inspection
+- Mounting structure inspection
+- Inverter inspection
+- Battery inspection where applicable
+- Electrical protection inspection
+- Performance monitoring
+
+Solar Panel Cleaning:
+
+Dust, dirt, bird droppings, and other contamination can reduce solar panel output.
+
+Cleaning frequency depends on:
+
+- Local environment
+- Dust levels
+- Rainfall
+- Panel angle
+- Nearby pollution
+- Bird activity
+
+Inverter Maintenance:
+
+Check for:
+
+- Error messages
+- Abnormal noise
+- Overheating
+- Ventilation problems
+- Communication issues
+- Unexpected shutdowns
+
+Battery Maintenance:
+
+Battery maintenance depends on battery technology.
+
+Lead-acid batteries may require more maintenance than many modern lithium-ion systems.
+
+Performance Monitoring:
+
+System performance can be monitored through:
+
+- Inverter displays
+- Mobile applications
+- Web monitoring platforms
+- Energy meters
+
+Warning Signs:
+
+- Significant reduction in energy generation
+- Repeated inverter errors
+- Battery alarms
+- Damaged cables
+- Loose mounting
+- Physical panel damage
+- Unusual electrical behavior
+
+Customer Questions:
+
+Customers may ask how often panels should be cleaned, how to maintain batteries, how to check inverter performance, and what to do when solar production decreases.
+
+Important Limitation:
+
+Electrical repairs and potentially hazardous maintenance should be performed by qualified professionals.

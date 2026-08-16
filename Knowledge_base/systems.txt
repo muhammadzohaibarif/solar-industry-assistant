@@ -1,0 +1,91 @@
+SOLAR SYSTEM TYPES
+
+Solar systems can generally be classified into three main types:
+
+1. ON-GRID SYSTEM
+2. OFF-GRID SYSTEM
+3. HYBRID SYSTEM
+
+ON-GRID SYSTEM:
+
+An on-grid solar system is connected to the utility electricity grid.
+
+Characteristics:
+
+- Solar panels generate electricity during suitable sunlight conditions.
+- The system works with the utility grid.
+- Battery storage is not necessarily required.
+- Excess generation may be handled according to applicable grid arrangements and regulations.
+
+Advantages:
+
+- Suitable for locations with reliable grid access
+- Can reduce electricity purchased from the grid
+- Usually simpler than systems with battery storage
+
+Limitations:
+
+- Grid-connected systems generally depend on grid availability for normal operation.
+- Backup capability depends on the specific system design.
+
+OFF-GRID SYSTEM:
+
+An off-grid solar system operates independently of the utility grid.
+
+Characteristics:
+
+- Solar panels provide electricity.
+- Batteries store energy when solar generation is insufficient.
+- An inverter manages conversion and supply.
+
+Advantages:
+
+- Useful where grid access is unavailable or unreliable
+- Can provide energy independence when properly designed
+
+Limitations:
+
+- Requires appropriate battery storage
+- Generation and storage must be correctly sized
+
+HYBRID SYSTEM:
+
+A hybrid solar system combines solar generation, battery storage, and grid interaction depending on the design.
+
+Characteristics:
+
+- Solar panels generate electricity.
+- Batteries can store energy.
+- Grid power can be used when required.
+- Backup can be available for selected loads depending on configuration.
+
+Advantages:
+
+- Greater flexibility
+- Backup capability
+- Combines solar, battery, and grid electricity
+
+Limitations:
+
+- More components and control requirements
+- Usually greater complexity and cost
+
+SYSTEM SELECTION:
+
+The appropriate system depends on:
+
+- Grid availability
+- Electricity consumption
+- Backup requirements
+- Battery requirements
+- Budget
+- Major electrical loads
+- Available installation area
+
+Customer Questions:
+
+Customers may ask about on-grid, off-grid, and hybrid systems, suitability, backup capability, batteries, and system costs.
+
+Important Limitation:
+
+Final system selection should be confirmed by a qualified solar professional after evaluating the site, electrical loads, grid conditions, and applicable requirements.

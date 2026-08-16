@@ -1,0 +1,93 @@
+SOLAR FAQ
+
+Q: What is solar energy?
+
+A: Solar energy is energy obtained from sunlight and can be converted into electricity using photovoltaic solar panels.
+
+Q: What is a solar panel?
+
+A: A solar panel is a photovoltaic device that converts sunlight into electrical energy.
+
+Q: What is a solar inverter?
+
+A: A solar inverter converts DC electricity from solar panels or batteries into AC electricity used by many electrical appliances.
+
+Q: What are the main types of solar systems?
+
+A: The main types are on-grid, off-grid, and hybrid systems.
+
+Q: What is an on-grid system?
+
+A: An on-grid system is connected to the utility electricity grid.
+
+Q: What is an off-grid system?
+
+A: An off-grid system operates independently of the utility grid and normally requires battery storage.
+
+Q: What is a hybrid system?
+
+A: A hybrid system combines solar generation, battery storage, and grid interaction depending on the system design.
+
+Q: Do solar panels work at night?
+
+A: Solar panels require sunlight to generate electricity, so they do not normally generate useful electricity at night. Stored battery energy or grid electricity can be used instead.
+
+Q: Do solar panels work on cloudy days?
+
+A: Solar panels can generate electricity during cloudy conditions, but output is generally lower than under strong direct sunlight.
+
+Q: How many solar panels do I need?
+
+A: The required number depends on electricity consumption, solar resource, panel wattage, system losses, available area, and system design.
+
+Q: Do I need batteries?
+
+A: Batteries are generally important for off-grid systems and can provide backup or energy storage in hybrid systems. They are not necessarily required for basic on-grid systems.
+
+Q: What is battery capacity?
+
+A: Battery capacity represents the amount of electrical energy that a battery can store, commonly expressed in kWh.
+
+Q: How long can a battery provide backup?
+
+A: Backup duration depends on battery usable energy and the power consumed by the connected loads.
+
+Q: Which solar panel is best?
+
+A: The appropriate panel depends on efficiency, wattage, quality, warranty, available space, budget, and system requirements.
+
+Q: Which is better, monocrystalline or polycrystalline?
+
+A: Modern monocrystalline panels generally offer higher efficiency, while polycrystalline panels can provide a cost-effective option depending on the application.
+
+Q: How long do solar panels last?
+
+A: Solar panels are designed for long-term operation, but their output gradually decreases over time. Actual service life depends on product quality, environmental conditions, and maintenance.
+
+Q: What affects solar panel output?
+
+A: Sunlight, shading, temperature, orientation, tilt, dirt, installation quality, and system losses can affect output.
+
+Q: How is solar system size estimated?
+
+A: Basic estimation uses daily energy consumption, available solar resource, system losses, and equipment characteristics.
+
+Q: Can solar provide backup during a power outage?
+
+A: Backup depends on the system design. Standard grid-connected systems may shut down during grid outages, while appropriately designed hybrid or off-grid systems can provide backup.
+
+Q: Why is my solar production lower than expected?
+
+A: Possible causes include shading, dirt, high temperature, equipment problems, incorrect configuration, seasonal changes, or other system losses.
+
+Q: Can I run an air conditioner on solar?
+
+A: Yes, but the solar system must be appropriately sized for the air conditioner's running power, starting requirements, operating hours, and other loads.
+
+Q: Can solar reduce my electricity bill?
+
+A: A properly designed solar system can reduce electricity purchased from the grid, but savings depend on energy consumption, system size, solar generation, electricity tariffs, and applicable policies.
+
+Important Limitation:
+
+The chatbot should provide general information and basic estimates. Final equipment selection, system sizing, electrical design, installation, pricing, and safety decisions should be verified by qualified solar professionals.

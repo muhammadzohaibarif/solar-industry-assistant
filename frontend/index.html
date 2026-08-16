@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Solar Industry Assistant - AI-powered solar calculations, recommendations and knowledge."
+    >
+
+    <title>Solar Industry Assistant</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            height: 100%;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100%;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8fafc 0%,
+                    #eefbf3 50%,
+                    #fff9e6 100%
+                );
+
+            color:
+                #17202a;
+
+        }
+
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+
+        /* =================================
+           APP
+        ================================= */
+
+        .app {
+
+            width: 100%;
+
+            max-width: 1100px;
+
+            min-height: 100vh;
+
+            margin: 0 auto;
+
+            padding: 20px;
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        /* =================================
+           HEADER
+        ================================= */
+
+        .header {
+
+            background:
+                rgba(255, 255, 255, 0.96);
+
+            border:
+                1px solid #eaecf0;
+
+            border-radius:
+                18px;
+
+            padding:
+                18px 22px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.07
+                );
+
+            margin-bottom:
+                16px;
+
+        }
+
+
+        .brand {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                13px;
+
+            min-width:
+                0;
+
+        }
+
+
+        .logo {
+
+            width:
+                50px;
+
+            height:
+                50px;
+
+            flex:
+                0 0 50px;
+
+            border-radius:
+                14px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                27px;
+
+            background:
+                #fff7d6;
+
+            border:
+                1px solid #f3df91;
+
+        }
+
+
+        .brand-text {
+            min-width: 0;
+        }
+
+
+        .brand h1 {
+
+            margin:
+                0;
+
+            font-size:
+                24px;
+
+            line-height:
+                1.2;
+
+        }
+
+
+        .brand p {
+
+            margin:
+                5px 0 0;
+
+            color:
+                #667085;
+
+            font-size:
+                13px;
+
+            line-height:
+                1.4;
+
+        }
+
+
+        .new-chat {
+
+            border:
+                none;
+
+            background:
+                #17202a;
+
+            color:
+                white;
+
+            padding:
+                11px 17px;
+
+            border-radius:
+                10px;
+
+            cursor:
+                pointer;
+
+            font-size:
+                14px;
+
+            font-weight:
+                600;
+
+            white-space:
+                nowrap;
+
+            transition:
+                opacity 0.2s ease,
+                transform 0.2s ease;
+
+        }
+
+
+        .new-chat:hover {
+
+            opacity:
+                0.88;
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        .new-chat:active {
+
+            transform:
+                translateY(0);
+
+        }
+
+
+        /* =================================
+           CHAT CONTAINER
+        ================================= */
+
+        .chat-container {
+
+            flex:
+                1;
+
+            min-height:
+                0;
+
+            background:
+                rgba(255, 255, 255, 0.97);
+
+            border:
+                1px solid #eaecf0;
+
+            border-radius:
+                18px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.07
+                );
+
+            overflow:
+                hidden;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+        }
+
+
+        .chat-box {
+
+            flex:
+                1;
+
+            min-height:
+                520px;
+
+            max-height:
+                650px;
+
+            overflow-y:
+                auto;
+
+            padding:
+                25px;
+
+            scroll-behavior:
+                smooth;
+
+        }
+
+
+        .chat-box::-webkit-scrollbar {
+            width: 7px;
+        }
+
+
+        .chat-box::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background: #d0d5dd;
+            border-radius: 10px;
+        }
+
+
+        /* =================================
+           MESSAGES
+        ================================= */
+
+        .message {
+
+            display:
+                flex;
+
+            margin-bottom:
+                18px;
+
+            animation:
+                messageIn 0.2s ease;
+
+        }
+
+
+        @keyframes messageIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+
+        .message-content {
+
+            max-width:
+                78%;
+
+            padding:
+                14px 17px;
+
+            border-radius:
+                15px;
+
+            line-height:
+                1.6;
+
+            white-space:
+                pre-wrap;
+
+            overflow-wrap:
+                anywhere;
+
+            font-size:
+                15px;
+
+        }
+
+
+        .user {
+
+            justify-content:
+                flex-end;
+
+        }
+
+
+        .user .message-content {
+
+            background:
+                #17202a;
+
+            color:
+                white;
+
+            border-bottom-right-radius:
+                4px;
+
+        }
+
+
+        .assistant {
+
+            justify-content:
+                flex-start;
+
+        }
+
+
+        .assistant .message-content {
+
+            background:
+                #eefbf3;
+
+            color:
+                #17202a;
+
+            border:
+                1px solid #dcefe4;
+
+            border-bottom-left-radius:
+                4px;
+
+        }
+
+
+        .message-label {
+
+            font-size:
+                11px;
+
+            font-weight:
+                bold;
+
+            margin-bottom:
+                5px;
+
+            opacity:
+                0.65;
+
+            letter-spacing:
+                0.3px;
+
+        }
+
+
+        /* =================================
+           WELCOME
+        ================================= */
+
+        .welcome {
+
+            text-align:
+                center;
+
+            padding:
+                55px 20px 40px;
+
+        }
+
+
+        .welcome-icon {
+
+            font-size:
+                50px;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        .welcome h2 {
+
+            margin:
+                0 0 10px;
+
+            font-size:
+                25px;
+
+        }
+
+
+        .welcome p {
+
+            color:
+                #667085;
+
+            max-width:
+                600px;
+
+            margin:
+                0 auto;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        /* =================================
+           SUGGESTIONS
+        ================================= */
+
+        .suggestions {
+
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                9px;
+
+            margin-top:
+                22px;
+
+            justify-content:
+                center;
+
+        }
+
+
+        .suggestion {
+
+            background:
+                white;
+
+            border:
+                1px solid #d0d5dd;
+
+            color:
+                #344054;
+
+            padding:
+                10px 14px;
+
+            border-radius:
+                20px;
+
+            cursor:
+                pointer;
+
+            font-size:
+                13px;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+
+        }
+
+
+        .suggestion:hover {
+
+            background:
+                #f2f4f7;
+
+            border-color:
+                #98a2b3;
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        /* =================================
+           INPUT AREA
+        ================================= */
+
+        .input-area {
+
+            padding:
+                16px;
+
+            border-top:
+                1px solid #eaecf0;
+
+            background:
+                white;
+
+        }
+
+
+        .input-wrapper {
+
+            display:
+                flex;
+
+            gap:
+                10px;
+
+        }
+
+
+        #question {
+
+            flex:
+                1;
+
+            min-width:
+                0;
+
+            border:
+                1px solid #d0d5dd;
+
+            border-radius:
+                12px;
+
+            padding:
+                14px 16px;
+
+            font-size:
+                15px;
+
+            outline:
+                none;
+
+            background:
+                white;
+
+            color:
+                #17202a;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+
+        }
+
+
+        #question::placeholder {
+            color: #98a2b3;
+        }
+
+
+        #question:focus {
+
+            border-color:
+                #17202a;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    23,
+                    32,
+                    42,
+                    0.08
+                );
+
+        }
+
+
+        #sendButton {
+
+            border:
+                none;
+
+            border-radius:
+                12px;
+
+            padding:
+                0 22px;
+
+            min-width:
+                80px;
+
+            background:
+                #17202a;
+
+            color:
+                white;
+
+            cursor:
+                pointer;
+
+            font-size:
+                15px;
+
+            font-weight:
+                600;
+
+            transition:
+                opacity 0.2s ease,
+                transform 0.2s ease;
+
+        }
+
+
+        #sendButton:hover:not(:disabled) {
+
+            opacity:
+                0.9;
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        #sendButton:disabled {
+
+            opacity:
+                0.5;
+
+            cursor:
+                not-allowed;
+
+        }
+
+
+        .status {
+
+            margin-top:
+                8px;
+
+            min-height:
+                16px;
+
+            font-size:
+                12px;
+
+            color:
+                #667085;
+
+        }
+
+
+        /* =================================
+           TYPING INDICATOR
+        ================================= */
+
+        .typing {
+
+            display:
+                none;
+
+            padding:
+                10px 15px;
+
+            color:
+                #667085;
+
+            font-size:
+                13px;
+
+            background:
+                #fafafa;
+
+            border-top:
+                1px solid #f2f4f7;
+
+        }
+
+
+        /* =================================
+           MOBILE
+        ================================= */
+
+        @media (
+            max-width: 700px
+        ) {
+
+            .app {
+
+                padding:
+                    8px;
+
+            }
+
+
+            .header {
+
+                padding:
+                    14px;
+
+                border-radius:
+                    14px;
+
+            }
+
+
+            .brand {
+
+                gap:
+                    10px;
+
+            }
+
+
+            .logo {
+
+                width:
+                    42px;
+
+                height:
+                    42px;
+
+                flex-basis:
+                    42px;
+
+                font-size:
+                    22px;
+
+            }
+
+
+            .brand h1 {
+
+                font-size:
+                    19px;
+
+            }
+
+
+            .brand p {
+
+                display:
+                    none;
+
+            }
+
+
+            .new-chat {
+
+                padding:
+                    9px 11px;
+
+                font-size:
+                    12px;
+
+            }
+
+
+            .chat-container {
+
+                border-radius:
+                    14px;
+
+            }
+
+
+            .chat-box {
+
+                min-height:
+                    65vh;
+
+                max-height:
+                    none;
+
+                padding:
+                    15px;
+
+            }
+
+
+            .message-content {
+
+                max-width:
+                    92%;
+
+                font-size:
+                    14px;
+
+                padding:
+                    12px 14px;
+
+            }
+
+
+            .welcome {
+
+                padding:
+                    40px 10px 25px;
+
+            }
+
+
+            .welcome h2 {
+
+                font-size:
+                    22px;
+
+            }
+
+
+            .welcome-icon {
+
+                font-size:
+                    42px;
+
+            }
+
+
+            .suggestions {
+
+                gap:
+                    7px;
+
+            }
+
+
+            .suggestion {
+
+                font-size:
+                    12px;
+
+                padding:
+                    8px 11px;
+
+            }
+
+
+            .input-area {
+
+                padding:
+                    11px;
+
+            }
+
+
+            .input-wrapper {
+
+                gap:
+                    7px;
+
+            }
+
+
+            #question {
+
+                padding:
+                    12px;
+
+                font-size:
+                    14px;
+
+            }
+
+
+            #sendButton {
+
+                padding:
+                    0 14px;
+
+                min-width:
+                    65px;
+
+                font-size:
+                    14px;
+
+            }
+
+        }
+
+
+        @media (
+            max-width: 420px
+        ) {
+
+            .brand h1 {
+                font-size: 17px;
+            }
+
+
+            .new-chat {
+                font-size: 11px;
+                padding: 8px 9px;
+            }
+
+
+            .message-content {
+                max-width: 96%;
+            }
+
+
+            .suggestion {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- ================================
+         HEADER
+    ================================= -->
+
+    <div class="header">
+
+        <div class="brand">
+
+            <div class="logo">
+                ☀️
+            </div>
+
+            <div class="brand-text">
+
+                <h1>
+                    Solar Industry Assistant
+                </h1>
+
+                <p>
+                    AI-powered solar calculations,
+                    recommendations and knowledge
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="new-chat"
+            onclick="newConversation()"
+            type="button"
+        >
+            + New Chat
+        </button>
+
+    </div>
+
+
+    <!-- ================================
+         CHAT
+    ================================= -->
+
+    <div class="chat-container">
+
+
+        <div
+            id="chatBox"
+            class="chat-box"
+        >
+
+
+            <div
+                id="welcome"
+                class="welcome"
+            >
+
+                <div class="welcome-icon">
+                    ☀️
+                </div>
+
+                <h2>
+                    Welcome to Solar Assistant
+                </h2>
+
+                <p>
+                    Ask me about solar panels,
+                    batteries, inverters, system
+                    sizing, energy consumption
+                    and solar recommendations.
+                </p>
+
+
+                <div class="suggestions">
+
+
+                    <button
+                        class="suggestion"
+                        type="button"
+                        onclick="useSuggestion('I use 300 kWh per month. How many 550W solar panels do I need?')"
+                    >
+                        ☀️ Solar panel sizing
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        type="button"
+                        onclick="useSuggestion('What is the difference between lithium-ion and lead-acid batteries?')"
+                    >
+                        🔋 Battery comparison
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        type="button"
+                        onclick="useSuggestion('My peak load is 2 kW. What inverter size should I use?')"
+                    >
+                        ⚡ Inverter sizing
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        type="button"
+                        onclick="useSuggestion('My grid is available but unreliable and I need backup. Which solar system should I choose?')"
+                    >
+                        🏠 System recommendation
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div
+            id="typing"
+            class="typing"
+        >
+            ☀️ Solar Assistant is thinking...
+        </div>
+
+
+        <!-- ================================
+             INPUT
+        ================================= -->
+
+        <div class="input-area">
+
+            <div class="input-wrapper">
+
+                <input
+                    id="question"
+                    type="text"
+                    placeholder="Ask a solar question..."
+                    autocomplete="off"
+                    maxlength="1000"
+                >
+
+
+                <button
+                    id="sendButton"
+                    onclick="sendMessage()"
+                    type="button"
+                >
+                    Send
+                </button>
+
+            </div>
+
+
+            <div
+                id="status"
+                class="status"
+            >
+                Ready
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =========================================
+   DOM ELEMENTS
+========================================= */
+
+const questionInput =
+    document.getElementById(
+        "question"
+    );
+
+
+const sendButton =
+    document.getElementById(
+        "sendButton"
+    );
+
+
+const chatBox =
+    document.getElementById(
+        "chatBox"
+    );
+
+
+const typing =
+    document.getElementById(
+        "typing"
+    );
+
+
+const statusText =
+    document.getElementById(
+        "status"
+    );
+
+
+const welcome =
+    document.getElementById(
+        "welcome"
+    );
+
+
+/* =========================================
+   ENTER KEY
+========================================= */
+
+questionInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter"
+            && !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   SUGGESTION BUTTON
+========================================= */
+
+function useSuggestion(
+    text
+) {
+
+    questionInput.value =
+        text;
+
+    questionInput.focus();
+
+}
+
+
+/* =========================================
+   ADD MESSAGE
+========================================= */
+
+function addMessage(
+    role,
+    text
+) {
+
+    const existingWelcome =
+        document.getElementById(
+            "welcome"
+        );
+
+
+    if (
+        existingWelcome
+    ) {
+
+        existingWelcome.style.display =
+            "none";
+
+    }
+
+
+    const message =
+        document.createElement(
+            "div"
+        );
+
+
+    message.className =
+        "message " + role;
+
+
+    const content =
+        document.createElement(
+            "div"
+        );
+
+
+    content.className =
+        "message-content";
+
+
+    const label =
+        document.createElement(
+            "div"
+        );
+
+
+    label.className =
+        "message-label";
+
+
+    label.textContent =
+        role === "user"
+            ? "YOU"
+            : "SOLAR ASSISTANT";
+
+
+    const textElement =
+        document.createElement(
+            "div"
+        );
+
+
+    textElement.textContent =
+        text;
+
+
+    content.appendChild(
+        label
+    );
+
+
+    content.appendChild(
+        textElement
+    );
+
+
+    message.appendChild(
+        content
+    );
+
+
+    chatBox.appendChild(
+        message
+    );
+
+
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
+
+}
+
+
+/* =========================================
+   SEND MESSAGE
+========================================= */
+
+async function sendMessage() {
+
+
+    const question =
+        questionInput.value.trim();
+
+
+    if (
+        !question
+    ) {
+
+        return;
+
+    }
+
+
+    addMessage(
+        "user",
+        question
+    );
+
+
+    questionInput.value =
+        "";
+
+
+    sendButton.disabled =
+        true;
+
+
+    typing.style.display =
+        "block";
+
+
+    statusText.textContent =
+        "Processing...";
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "http://127.0.0.1:5000/chat",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            question:
+                                question
+
+                        })
+
+                }
+            );
+
+
+        let data;
+
+
+        try {
+
+            data =
+                await response.json();
+
+        }
+
+        catch (
+            jsonError
+        ) {
+
+            throw new Error(
+                "The server returned an invalid response."
+            );
+
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error ||
+                "Server error"
+            );
+
+        }
+
+
+        addMessage(
+            "assistant",
+            data.answer
+        );
+
+
+        statusText.textContent =
+            "Ready";
+
+
+    }
+
+    catch (
+        error
+    ) {
+
+
+        addMessage(
+
+            "assistant",
+
+            "⚠️ Connection error: " +
+            error.message
+
+        );
+
+
+        statusText.textContent =
+            "Connection failed";
+
+    }
+
+
+    finally {
+
+
+        typing.style.display =
+            "none";
+
+
+        sendButton.disabled =
+            false;
+
+
+        questionInput.focus();
+
+    }
+
+}
+
+
+/* =========================================
+   NEW CONVERSATION
+========================================= */
+
+async function newConversation() {
+
+
+    sendButton.disabled =
+        true;
+
+
+    statusText.textContent =
+        "Starting new conversation...";
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "http://127.0.0.1:5000/conversation",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    }
+
+                }
+            );
+
+
+        let data;
+
+
+        try {
+
+            data =
+                await response.json();
+
+        }
+
+        catch (
+            jsonError
+        ) {
+
+            throw new Error(
+                "The server returned an invalid response."
+            );
+
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error ||
+                "Could not create conversation"
+            );
+
+        }
+
+
+        chatBox.innerHTML = `
+
+            <div
+                id="welcome"
+                class="welcome"
+            >
+
+                <div class="welcome-icon">
+                    ☀️
+                </div>
+
+                <h2>
+                    New Solar Conversation
+                </h2>
+
+                <p>
+                    Your new conversation is ready.
+                    Ask me anything about solar.
+                </p>
+
+            </div>
+
+        `;
+
+
+        statusText.textContent =
+            "New conversation started";
+
+
+    }
+
+    catch (
+        error
+    ) {
+
+
+        statusText.textContent =
+            "Could not start new conversation";
+
+
+        console.error(
+            "New conversation error:",
+            error
+        );
+
+    }
+
+
+    finally {
+
+        sendButton.disabled =
+            false;
+
+        questionInput.focus();
+
+    }
+
+}
+
+
+/* =========================================
+   INITIAL FOCUS
+========================================= */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        questionInput.focus();
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

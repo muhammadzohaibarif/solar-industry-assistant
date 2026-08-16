@@ -1,0 +1,99 @@
+SOLAR ENERGY CONSUMPTION
+
+Definition:
+
+Energy consumption is the amount of electrical energy used by appliances and electrical equipment over a period of time.
+
+The common unit for electricity consumption is kilowatt-hour (kWh).
+
+Basic Formula:
+
+Energy Consumption (Wh) = Power (W) × Operating Time (hours)
+
+For kilowatt-hours:
+
+Energy Consumption (kWh) = Power (kW) × Operating Time (hours)
+
+Example:
+
+A 1000 W appliance operating for 2 hours consumes approximately:
+
+1000 × 2 = 2000 Wh
+
+or
+
+2 kWh
+
+Daily Energy Consumption:
+
+Daily consumption can be estimated by calculating the energy used by each appliance and adding the results.
+
+Example:
+
+Fan:
+100 W × 8 hours = 800 Wh
+
+Refrigerator:
+150 W × 10 hours equivalent = 1500 Wh
+
+Lights:
+20 W × 5 hours = 100 Wh
+
+Total estimated consumption:
+
+2400 Wh = 2.4 kWh per day
+
+Important Loads:
+
+Solar system planning may consider:
+
+- Lights
+- Fans
+- Refrigerators
+- TVs
+- Computers
+- Washing machines
+- Water pumps
+- Air conditioners
+- Motors
+- Kitchen appliances
+- Other electrical equipment
+
+Load Information:
+
+For each appliance, collect:
+
+- Appliance name
+- Rated power
+- Quantity
+- Hours of operation per day
+- Starting or surge requirements where applicable
+
+Peak Load:
+
+Peak load is the highest electrical demand occurring when multiple appliances operate simultaneously.
+
+Peak load is important when selecting an inverter.
+
+Energy Consumption and Solar Sizing:
+
+Daily energy consumption is one of the important inputs used to estimate the required solar generation capacity.
+
+Actual generation depends on:
+
+- Solar irradiation
+- Location
+- Panel orientation
+- Panel tilt
+- Shading
+- Temperature
+- System losses
+- Equipment efficiency
+
+Customer Questions:
+
+Customers may ask how to calculate electricity consumption, how many units they use, what appliances consume the most electricity, and how consumption affects solar sizing.
+
+Important Limitation:
+
+Energy consumption estimates should be based on actual electricity bills, appliance ratings, measured usage, or professional load assessment where possible.

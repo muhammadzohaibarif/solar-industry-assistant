@@ -1,0 +1,74 @@
+SOLAR SYSTEM PRICING
+
+Definition:
+
+Solar system pricing refers to the total cost of equipment, installation, electrical work, protection devices, structure, transportation, and other services required to install a solar energy system.
+
+Major Cost Components:
+
+- Solar panels
+- Inverter
+- Batteries where required
+- Mounting structure
+- DC cables
+- AC cables
+- Protection devices
+- Electrical distribution equipment
+- Installation labor
+- Transportation
+- Monitoring equipment
+- Maintenance or service arrangements
+
+Factors Affecting Price:
+
+- System capacity
+- Panel type and brand
+- Inverter type and brand
+- Battery capacity
+- Battery technology
+- Installation complexity
+- Roof structure
+- Cable length
+- Protection requirements
+- Location
+- Labor costs
+- Warranty
+- Market conditions
+
+On-Grid Pricing:
+
+On-grid systems may have lower initial costs than systems requiring significant battery storage because batteries are not necessarily included.
+
+Off-Grid Pricing:
+
+Off-grid systems generally require battery storage and may therefore have higher equipment costs.
+
+Hybrid Pricing:
+
+Hybrid systems can have higher costs because they may include solar panels, batteries, hybrid inverters, protection equipment, and additional control functionality.
+
+Price Quotes:
+
+A professional quotation should clearly identify:
+
+- System capacity
+- Equipment specifications
+- Quantity
+- Installation scope
+- Warranty
+- Included accessories
+- Payment terms
+- Expected timeline
+- Any exclusions
+
+Important:
+
+Solar prices can change based on location, supplier, equipment availability, exchange rates, taxes, market conditions, and installation requirements.
+
+Customer Questions:
+
+Customers may ask about solar system costs, panel prices, inverter prices, battery prices, installation costs, and complete system quotations.
+
+Important Limitation:
+
+The chatbot should not provide a final or guaranteed price without current supplier data and a site-specific quotation.
