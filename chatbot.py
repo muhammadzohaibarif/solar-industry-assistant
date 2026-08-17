@@ -1,5 +1,6 @@
 import requests
 import re
+import os
 
 from solar_tools import (
     solar_size_tool,
@@ -24,8 +25,15 @@ from database import (
 # STEP 15G - FINAL TOOL DETECTION + MEMORY
 # ============================================================
 
-OLLAMA_URL = "http://localhost:11434/api/chat"
-MODEL = "llama3.2:latest"
+OLLAMA_URL = os.getenv(
+    "OLLAMA_URL",
+    "http://localhost:11434/api/chat"
+)
+
+MODEL = os.getenv(
+    "MODEL",
+    "llama3.2:latest"
+)
 
 
 # ============================================================
