@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import requests
 
@@ -7,7 +8,10 @@ import requests
 # STEP 17 - PERSISTENT CONVERSATION WEB INTERFACE
 # ============================================================
 
-BACKEND_BASE_URL = "http://127.0.0.1:5000"
+BACKEND_BASE_URL = os.environ.get(
+    "BACKEND_URL",
+    "http://127.0.0.1:5000"
+).rstrip("/")
 
 
 # ============================================================
@@ -26,17 +30,12 @@ st.set_page_config(
 # ============================================================
 
 if "conversation_id" not in st.session_state:
-
     st.session_state.conversation_id = None
 
-
 if "messages" not in st.session_state:
-
     st.session_state.messages = []
 
-
 if "conversations" not in st.session_state:
-
     st.session_state.conversations = []
 
 
@@ -58,14 +57,12 @@ def get_conversations():
         data = response.json()
 
         if data.get("success"):
-
             return data.get(
                 "conversations",
                 []
             )
 
     except Exception:
-
         return []
 
     return []
@@ -218,7 +215,7 @@ def send_message(
 
         return (
             "⚠️ Cannot connect to the backend. "
-            "Make sure backend.py is running."
+            "Please check the backend service."
         )
 
     except requests.exceptions.Timeout:
@@ -358,7 +355,7 @@ with st.sidebar:
 
             if st.button(
 
-                f"🗑️ Delete",
+                "🗑️ Delete",
 
                 key=f"delete_{conversation_id}",
 
