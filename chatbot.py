@@ -30,6 +30,7 @@ LLM_PROVIDER = os.getenv(
     "groq"
 ).lower()
 
+
 # ============================================================
 # OLLAMA CONFIGURATION
 # ============================================================
@@ -43,6 +44,7 @@ MODEL = os.getenv(
     "MODEL",
     "llama3.2:latest"
 )
+
 
 # ============================================================
 # GROQ CONFIGURATION
@@ -289,21 +291,40 @@ def handle_solar_size(
     previous_messages=None
 ):
 
+    question_text = question.lower().strip()
+
     numbers = extract_numbers(
         question
     )
 
-    question_text = question.lower()
+    # --------------------------------------------------------
+    # DAILY KEYWORDS
+    # --------------------------------------------------------
 
-    consumption_keywords = [
+    daily_keywords = [
 
-        "kwh",
+        "per day",
+        "a day",
+        "daily",
+        "each day",
+        "every day",
+        "day"
+
+    ]
+
+    # --------------------------------------------------------
+    # MONTHLY KEYWORDS
+    # --------------------------------------------------------
+
+    monthly_keywords = [
+
+        "per month",
+        "a month",
+        "monthly",
+        "each month",
+        "every month",
         "monthly consumption",
-        "electricity consumption",
         "monthly electricity",
-        "electricity usage",
-        "energy consumption",
-        "energy usage",
         "use per month",
         "uses per month",
         "consume per month",
@@ -312,13 +333,56 @@ def handle_solar_size(
 
     ]
 
+    # --------------------------------------------------------
+    # CONSUMPTION KEYWORDS
+    # --------------------------------------------------------
+
+    consumption_keywords = [
+
+        "kwh",
+        "electricity consumption",
+        "electricity usage",
+        "energy consumption",
+        "energy usage",
+        "monthly consumption",
+        "monthly electricity",
+        "use per month",
+        "uses per month",
+        "consume per month",
+        "consumes per month",
+        "consumption per month",
+        "electricity use",
+        "energy use"
+
+    ]
+
+    # --------------------------------------------------------
+    # SUN-HOUR KEYWORDS
+    # --------------------------------------------------------
+
+    sun_hour_keywords = [
+
+        "peak sun hours",
+        "peak sunlight hours",
+        "sun hours",
+        "sunlight hours",
+        "solar hours",
+        "hours of sun",
+        "hours of sunlight"
+
+    ]
+
+    # --------------------------------------------------------
+    # FIND CONSUMPTION
+    # --------------------------------------------------------
+
     current_has_consumption = any(
-
         keyword in question_text
-
         for keyword in consumption_keywords
-
     )
+
+    source_text = question_text
+    source_numbers = numbers
 
     if (
         not current_has_consumption
@@ -362,44 +426,160 @@ def handle_solar_size(
 
             if previous_numbers:
 
-                numbers = [
+                source_text = previous_text
+
+                source_numbers = [
                     previous_numbers[0]
                 ]
 
                 break
 
-    if not numbers:
+    # --------------------------------------------------------
+    # NO CONSUMPTION
+    # --------------------------------------------------------
+
+    if not source_numbers:
 
         return (
-            "Please provide your monthly electricity "
+            "Please provide your electricity "
             "consumption in kWh.\n\n"
-            "Example: I use 300 kWh per month."
+            "Examples:\n"
+            "- I use 20 kWh per day.\n"
+            "- I use 600 kWh per month."
         )
 
-    monthly_consumption = numbers[0]
+    consumption_value = source_numbers[0]
+
+    # --------------------------------------------------------
+    # DETERMINE DAILY OR MONTHLY
+    # --------------------------------------------------------
+
+    if any(
+        keyword in source_text
+        for keyword in daily_keywords
+    ):
+
+        monthly_consumption = (
+            consumption_value * 30
+        )
+
+    elif any(
+        keyword in source_text
+        for keyword in monthly_keywords
+    ):
+
+        monthly_consumption = (
+            consumption_value
+        )
+
+    else:
+
+        return (
+            "Please specify whether your "
+            "electricity consumption is daily "
+            "or monthly.\n\n"
+            "Examples:\n"
+            "- I use 20 kWh per day.\n"
+            "- I use 600 kWh per month."
+        )
+
+    # --------------------------------------------------------
+    # PEAK SUN HOURS
+    # --------------------------------------------------------
+
+    peak_sun_hours = 5
+
+    sun_hour_found = False
+
+    for index, number in enumerate(numbers):
+
+        if (
+            1 <= number <= 15
+            and any(
+                keyword in question_text
+                for keyword in sun_hour_keywords
+            )
+        ):
+
+            peak_sun_hours = number
+            sun_hour_found = True
+            break
+
+    # --------------------------------------------------------
+    # CHECK PREVIOUS MESSAGE FOR SUN HOURS
+    # --------------------------------------------------------
+
+    if (
+        not sun_hour_found
+        and previous_messages
+    ):
+
+        for message in reversed(
+            previous_messages
+        ):
+
+            if message["role"] != "user":
+                continue
+
+            previous_text = (
+                message["content"]
+                .lower()
+                .strip()
+            )
+
+            if not any(
+                keyword in previous_text
+                for keyword in sun_hour_keywords
+            ):
+                continue
+
+            previous_numbers = extract_numbers(
+                previous_text
+            )
+
+            if len(previous_numbers) >= 2:
+
+                possible_sun_hours = (
+                    previous_numbers[-1]
+                )
+
+                if 1 <= possible_sun_hours <= 15:
+
+                    peak_sun_hours = (
+                        possible_sun_hours
+                    )
+
+                    break
+
+    # --------------------------------------------------------
+    # PANEL WATTAGE
+    # --------------------------------------------------------
 
     panel_wattage = 550
 
-    current_numbers = extract_numbers(
-        question
-    )
-
-    for number in current_numbers:
+    for number in numbers:
 
         if (
             100 <= number <= 1000
-            and number != monthly_consumption
+            and number != consumption_value
+            and number != peak_sun_hours
         ):
 
-            panel_wattage = int(
-                number
-            )
-
+            panel_wattage = int(number)
             break
 
+    # --------------------------------------------------------
+    # SOLAR CALCULATION
+    # --------------------------------------------------------
+
     result = solar_size_tool(
+
         monthly_consumption,
-        panel_wattage
+
+        panel_wattage,
+
+        peak_sun_hours
+
     )
 
     return (
@@ -409,6 +589,8 @@ def handle_solar_size(
         f"{result['monthly_consumption_kwh']} kWh\n"
         f"Daily Consumption: "
         f"{result['daily_consumption_kwh']} kWh\n"
+        f"Peak Sun Hours: "
+        f"{result['peak_sun_hours']} hours\n"
         f"Estimated Solar Capacity: "
         f"{result['solar_capacity_kw']} kW\n"
         f"Panel Wattage: "
@@ -477,6 +659,7 @@ def handle_battery_size(
         )
 
     backup_load = numbers[0]
+
     backup_hours = numbers[1]
 
     result = battery_size_tool(
@@ -548,6 +731,7 @@ def handle_backup_time(
         )
 
     battery_capacity = numbers[0]
+
     load = numbers[1]
 
     result = backup_time_tool(
@@ -848,16 +1032,17 @@ def detect_tool(
     ]
 
     is_information_question = any(
-
         phrase in text
-
         for phrase in information_phrases
-
     )
 
     if is_information_question:
 
         return None
+
+    # --------------------------------------------------------
+    # SYSTEM
+    # --------------------------------------------------------
 
     if (
 
@@ -893,6 +1078,10 @@ def detect_tool(
 
         return "system"
 
+    # --------------------------------------------------------
+    # BATTERY
+    # --------------------------------------------------------
+
     if (
 
         "battery" in text
@@ -911,6 +1100,10 @@ def detect_tool(
     ):
 
         return "battery"
+
+    # --------------------------------------------------------
+    # BACKUP TIME
+    # --------------------------------------------------------
 
     if (
 
@@ -934,6 +1127,10 @@ def detect_tool(
 
         return "backup"
 
+    # --------------------------------------------------------
+    # INVERTER
+    # --------------------------------------------------------
+
     if (
 
         "inverter" in text
@@ -952,6 +1149,10 @@ def detect_tool(
 
         return "inverter"
 
+    # --------------------------------------------------------
+    # SOLAR
+    # --------------------------------------------------------
+
     if (
 
         "solar size" in text
@@ -962,6 +1163,7 @@ def detect_tool(
         or "how many panels" in text
         or "number of solar panels" in text
         or "number of panels" in text
+        or "solar system" in text
 
         or (
 
@@ -972,6 +1174,21 @@ def detect_tool(
                 "need" in text
                 or "require" in text
                 or "how much" in text
+                or "size" in text
+
+            )
+
+        )
+
+        or (
+
+            "kwh" in text
+
+            and (
+
+                "solar" in text
+                or "panel" in text
+                or "sun" in text
 
             )
 

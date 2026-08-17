@@ -1,9 +1,8 @@
 """
 Solar Industry Chatbot
-Step 9A - Solar Tools Interface
+Solar Tools Interface
 
-This file provides simple functions that the chatbot
-can call to perform solar calculations.
+Provides calculation tools used by the chatbot.
 """
 
 from solar_calculator import (
@@ -20,21 +19,34 @@ from solar_calculator import (
 
 
 # ============================================================
-# TOOL 1 — SOLAR SIZE FROM MONTHLY CONSUMPTION
+# TOOL 1 — SOLAR SIZE
 # ============================================================
 
 def solar_size_tool(
     monthly_consumption,
-    panel_wattage=550
+    panel_wattage=550,
+    peak_sun_hours=5
 ):
-    """Calculate solar capacity and panel requirement."""
+    """
+    Calculate solar capacity and panel requirement.
+
+    monthly_consumption:
+        Monthly electricity consumption in kWh.
+
+    panel_wattage:
+        Solar panel wattage.
+
+    peak_sun_hours:
+        Average peak sun hours per day.
+    """
 
     daily_consumption = monthly_to_daily_energy(
         monthly_consumption
     )
 
     solar_capacity = calculate_solar_capacity(
-        daily_consumption
+        daily_consumption,
+        peak_sun_hours=peak_sun_hours
     )
 
     panel_count = calculate_panel_count(
@@ -52,6 +64,9 @@ def solar_size_tool(
 
         "daily_consumption_kwh":
             round(daily_consumption, 2),
+
+        "peak_sun_hours":
+            round(peak_sun_hours, 2),
 
         "solar_capacity_kw":
             round(solar_capacity, 2),
@@ -179,15 +194,13 @@ def appliance_consumption_tool(
 ):
     """Calculate consumption from appliances."""
 
-    result = calculate_appliance_load(
+    return calculate_appliance_load(
         appliances
     )
 
-    return result
-
 
 # ============================================================
-# TOOL 7 — HELP
+# TOOL 7 — AVAILABLE TOOLS
 # ============================================================
 
 def available_tools():
@@ -216,7 +229,8 @@ if __name__ == "__main__":
     # Solar size test
     solar = solar_size_tool(
         monthly_consumption=300,
-        panel_wattage=550
+        panel_wattage=550,
+        peak_sun_hours=5
     )
 
     print("\nSOLAR SIZE TOOL")
@@ -286,6 +300,7 @@ if __name__ == "__main__":
 
     print("\nAPPLIANCE TOOL")
     print("-" * 70)
+
     print(
         f"Daily Energy: "
         f"{appliance_result['total_daily_energy_kwh']:.2f} kWh"
@@ -308,5 +323,5 @@ if __name__ == "__main__":
         print(f"- {tool}")
 
     print("\n" + "=" * 70)
-    print("STEP 9A TEST COMPLETED")
+    print("SOLAR TOOLS TEST COMPLETED")
     print("=" * 70)
