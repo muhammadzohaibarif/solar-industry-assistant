@@ -1,0 +1,24 @@
+services:
+
+  - type: web
+    name: solar-industry-chatbot-backend
+
+    runtime: python
+
+    buildCommand: pip install -r requirements.txt
+
+    startCommand: gunicorn backend:app
+
+    envVars:
+
+      - key: LLM_PROVIDER
+        value: groq
+
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-20b
+
+      - key: GROQ_API_KEY
+        sync: false
+
+      - key: PYTHON_VERSION
+        value: 3.12.10

@@ -2,6 +2,8 @@ import requests
 import re
 import os
 
+from dotenv import load_dotenv
+
 from solar_tools import (
     solar_size_tool,
     battery_size_tool,
@@ -21,8 +23,15 @@ from database import (
 
 
 # ============================================================
+# LOAD ENVIRONMENT VARIABLES
+# ============================================================
+
+load_dotenv()
+
+
+# ============================================================
 # SOLAR INDUSTRY CHATBOT
-# STEP 16 - LOCAL OLLAMA + CLOUD GROQ DEPLOYMENT
+# STEP 18 - DEPLOYMENT PREPARATION
 # ============================================================
 
 LLM_PROVIDER = os.getenv(
@@ -81,9 +90,13 @@ def extract_numbers(text):
     for match in matches:
 
         try:
-            numbers.append(float(match))
+
+            numbers.append(
+                float(match)
+            )
 
         except ValueError:
+
             pass
 
     return numbers
@@ -100,6 +113,7 @@ def ask_ollama(
 ):
 
     system_prompt = (
+
         "You are a professional Solar Industry Assistant. "
 
         "You answer questions about solar panels, inverters, "
@@ -122,52 +136,78 @@ def ask_ollama(
         "knowledge base or a calculation tool. "
 
         "Give clear, concise and customer-friendly answers."
+
     )
+
 
     if conversation_context:
 
         system_prompt += (
+
             "\n\nPREVIOUS CONVERSATION:\n"
+
             f"{conversation_context}"
+
         )
+
 
     if knowledge_context:
 
         system_prompt += (
+
             "\n\nKNOWLEDGE BASE:\n"
+
             f"{knowledge_context}"
+
         )
+
 
     payload = {
 
-        "model": MODEL,
+        "model":
+            MODEL,
 
         "messages": [
 
             {
-                "role": "system",
-                "content": system_prompt
+                "role":
+                    "system",
+
+                "content":
+                    system_prompt
             },
 
             {
-                "role": "user",
-                "content": question
+                "role":
+                    "user",
+
+                "content":
+                    question
             }
 
         ],
 
-        "stream": False
+        "stream":
+            False
+
     }
 
+
     response = requests.post(
+
         OLLAMA_URL,
+
         json=payload,
+
         timeout=180
+
     )
+
 
     response.raise_for_status()
 
     data = response.json()
+
 
     return data["message"]["content"]
 
@@ -188,7 +228,9 @@ def ask_groq(
             "GROQ_API_KEY is not configured."
         )
 
+
     system_prompt = (
+
         "You are a professional Solar Industry Assistant. "
 
         "You answer questions about solar panels, inverters, "
@@ -211,21 +253,31 @@ def ask_groq(
         "knowledge base or a calculation tool. "
 
         "Give clear, concise and customer-friendly answers."
+
     )
+
 
     if conversation_context:
 
         system_prompt += (
+
             "\n\nPREVIOUS CONVERSATION:\n"
+
             f"{conversation_context}"
+
         )
+
 
     if knowledge_context:
 
         system_prompt += (
+
             "\n\nKNOWLEDGE BASE:\n"
+
             f"{knowledge_context}"
+
         )
+
 
     headers = {
 
@@ -237,29 +289,40 @@ def ask_groq(
 
     }
 
+
     payload = {
 
-        "model": GROQ_MODEL,
+        "model":
+            GROQ_MODEL,
 
         "messages": [
 
             {
-                "role": "system",
-                "content": system_prompt
+                "role":
+                    "system",
+
+                "content":
+                    system_prompt
             },
 
             {
-                "role": "user",
-                "content": question
+                "role":
+                    "user",
+
+                "content":
+                    question
             }
 
         ],
 
-        "temperature": 0.2,
+        "temperature":
+            0.2,
 
-        "stream": False
+        "stream":
+            False
 
     }
+
 
     response = requests.post(
 
@@ -273,9 +336,11 @@ def ask_groq(
 
     )
 
+
     response.raise_for_status()
 
     data = response.json()
+
 
     return (
         data["choices"][0]["message"]["content"]
@@ -291,15 +356,14 @@ def handle_solar_size(
     previous_messages=None
 ):
 
-    question_text = question.lower().strip()
+    question_text = (
+        question.lower().strip()
+    )
 
     numbers = extract_numbers(
         question
     )
 
-    # --------------------------------------------------------
-    # DAILY KEYWORDS
-    # --------------------------------------------------------
 
     daily_keywords = [
 
@@ -312,9 +376,6 @@ def handle_solar_size(
 
     ]
 
-    # --------------------------------------------------------
-    # MONTHLY KEYWORDS
-    # --------------------------------------------------------
 
     monthly_keywords = [
 
@@ -333,9 +394,6 @@ def handle_solar_size(
 
     ]
 
-    # --------------------------------------------------------
-    # CONSUMPTION KEYWORDS
-    # --------------------------------------------------------
 
     consumption_keywords = [
 
@@ -356,9 +414,6 @@ def handle_solar_size(
 
     ]
 
-    # --------------------------------------------------------
-    # SUN-HOUR KEYWORDS
-    # --------------------------------------------------------
 
     sun_hour_keywords = [
 
@@ -372,17 +427,20 @@ def handle_solar_size(
 
     ]
 
-    # --------------------------------------------------------
-    # FIND CONSUMPTION
-    # --------------------------------------------------------
 
     current_has_consumption = any(
+
         keyword in question_text
+
         for keyword in consumption_keywords
+
     )
 
+
     source_text = question_text
+
     source_numbers = numbers
+
 
     if (
         not current_has_consumption
@@ -394,20 +452,29 @@ def handle_solar_size(
         ):
 
             if message["role"] != "user":
+
                 continue
 
+
             previous_text = (
+
                 message["content"]
                 .lower()
                 .strip()
+
             )
 
+
             if (
+
                 "battery" in previous_text
                 or "backup" in previous_text
                 or "inverter" in previous_text
+
             ):
+
                 continue
+
 
             previous_has_consumption = any(
 
@@ -417,160 +484,204 @@ def handle_solar_size(
 
             )
 
+
             if not previous_has_consumption:
+
                 continue
 
+
             previous_numbers = extract_numbers(
+
                 previous_text
+
             )
+
 
             if previous_numbers:
 
                 source_text = previous_text
 
                 source_numbers = [
+
                     previous_numbers[0]
+
                 ]
 
                 break
 
-    # --------------------------------------------------------
-    # NO CONSUMPTION
-    # --------------------------------------------------------
 
     if not source_numbers:
 
         return (
+
             "Please provide your electricity "
             "consumption in kWh.\n\n"
             "Examples:\n"
             "- I use 20 kWh per day.\n"
             "- I use 600 kWh per month."
+
         )
+
 
     consumption_value = source_numbers[0]
 
-    # --------------------------------------------------------
-    # DETERMINE DAILY OR MONTHLY
-    # --------------------------------------------------------
 
     if any(
+
         keyword in source_text
+
         for keyword in daily_keywords
+
     ):
 
         monthly_consumption = (
+
             consumption_value * 30
+
         )
+
 
     elif any(
+
         keyword in source_text
+
         for keyword in monthly_keywords
+
     ):
 
         monthly_consumption = (
+
             consumption_value
+
         )
+
 
     else:
 
         return (
+
             "Please specify whether your "
             "electricity consumption is daily "
             "or monthly.\n\n"
             "Examples:\n"
             "- I use 20 kWh per day.\n"
             "- I use 600 kWh per month."
+
         )
 
-    # --------------------------------------------------------
-    # PEAK SUN HOURS
-    # --------------------------------------------------------
 
     peak_sun_hours = 5
 
     sun_hour_found = False
 
-    for index, number in enumerate(numbers):
-
-        if (
-            1 <= number <= 15
-            and any(
-                keyword in question_text
-                for keyword in sun_hour_keywords
-            )
-        ):
-
-            peak_sun_hours = number
-            sun_hour_found = True
-            break
-
-    # --------------------------------------------------------
-    # CHECK PREVIOUS MESSAGE FOR SUN HOURS
-    # --------------------------------------------------------
-
-    if (
-        not sun_hour_found
-        and previous_messages
-    ):
-
-        for message in reversed(
-            previous_messages
-        ):
-
-            if message["role"] != "user":
-                continue
-
-            previous_text = (
-                message["content"]
-                .lower()
-                .strip()
-            )
-
-            if not any(
-                keyword in previous_text
-                for keyword in sun_hour_keywords
-            ):
-                continue
-
-            previous_numbers = extract_numbers(
-                previous_text
-            )
-
-            if len(previous_numbers) >= 2:
-
-                possible_sun_hours = (
-                    previous_numbers[-1]
-                )
-
-                if 1 <= possible_sun_hours <= 15:
-
-                    peak_sun_hours = (
-                        possible_sun_hours
-                    )
-
-                    break
-
-    # --------------------------------------------------------
-    # PANEL WATTAGE
-    # --------------------------------------------------------
-
-    panel_wattage = 550
 
     for number in numbers:
 
         if (
+
+            1 <= number <= 15
+
+            and any(
+
+                keyword in question_text
+
+                for keyword in sun_hour_keywords
+
+            )
+
+        ):
+
+            peak_sun_hours = number
+
+            sun_hour_found = True
+
+            break
+
+
+    if (
+
+        not sun_hour_found
+        and previous_messages
+
+    ):
+
+        for message in reversed(
+
+            previous_messages
+
+        ):
+
+            if message["role"] != "user":
+
+                continue
+
+
+            previous_text = (
+
+                message["content"]
+                .lower()
+                .strip()
+
+            )
+
+
+            if not any(
+
+                keyword in previous_text
+
+                for keyword in sun_hour_keywords
+
+            ):
+
+                continue
+
+
+            previous_numbers = extract_numbers(
+
+                previous_text
+
+            )
+
+
+            if len(previous_numbers) >= 2:
+
+                possible_sun_hours = (
+
+                    previous_numbers[-1]
+
+                )
+
+
+                if 1 <= possible_sun_hours <= 15:
+
+                    peak_sun_hours = (
+
+                        possible_sun_hours
+
+                    )
+
+                    break
+
+
+    panel_wattage = 550
+
+
+    for number in numbers:
+
+        if (
+
             100 <= number <= 1000
+
             and number != consumption_value
+
             and number != peak_sun_hours
+
         ):
 
             panel_wattage = int(number)
+
             break
 
-    # --------------------------------------------------------
-    # SOLAR CALCULATION
-    # --------------------------------------------------------
 
     result = solar_size_tool(
 
@@ -582,29 +693,41 @@ def handle_solar_size(
 
     )
 
+
     return (
+
         "\nSOLAR CALCULATION RESULT\n"
         "----------------------------------------\n"
+
         f"Monthly Consumption: "
         f"{result['monthly_consumption_kwh']} kWh\n"
+
         f"Daily Consumption: "
         f"{result['daily_consumption_kwh']} kWh\n"
+
         f"Peak Sun Hours: "
         f"{result['peak_sun_hours']} hours\n"
+
         f"Estimated Solar Capacity: "
         f"{result['solar_capacity_kw']} kW\n"
+
         f"Panel Wattage: "
         f"{result['panel_wattage_w']} W\n"
+
         f"Estimated Number of Panels: "
         f"{result['panel_count']}\n"
+
         f"Actual Panel Capacity: "
         f"{result['actual_panel_capacity_kw']} kW\n"
+
         "----------------------------------------\n\n"
+
         "Note: This is an estimated system size. "
         "Final sizing should be verified by a qualified "
         "solar professional based on site conditions, "
         "loads, equipment specifications and local "
         "requirements."
+
     )
 
 
@@ -621,6 +744,7 @@ def handle_battery_size(
         question
     )
 
+
     if len(numbers) < 2 and previous_messages:
 
         for message in reversed(
@@ -628,22 +752,34 @@ def handle_battery_size(
         ):
 
             if message["role"] != "user":
+
                 continue
+
 
             previous_text = (
+
                 message["content"]
                 .lower()
+
             )
+
 
             if (
+
                 "battery" not in previous_text
                 and "backup" not in previous_text
+
             ):
+
                 continue
 
+
             previous_numbers = extract_numbers(
+
                 previous_text
+
             )
+
 
             if len(previous_numbers) >= 2:
 
@@ -651,32 +787,47 @@ def handle_battery_size(
 
                 break
 
+
     if len(numbers) < 2:
 
         return (
+
             "Please provide the backup load in kW "
             "and required backup time in hours."
+
         )
+
 
     backup_load = numbers[0]
 
     backup_hours = numbers[1]
 
+
     result = battery_size_tool(
+
         backup_load,
+
         backup_hours
+
     )
 
+
     return (
+
         "\nBATTERY CALCULATION RESULT\n"
         "----------------------------------------\n"
+
         f"Backup Load: "
         f"{result['backup_load_kw']} kW\n"
+
         f"Required Backup Time: "
         f"{result['backup_hours']} hours\n"
+
         f"Estimated Battery Capacity: "
         f"{result['battery_capacity_kwh']} kWh\n"
+
         "----------------------------------------"
+
     )
 
 
@@ -693,6 +844,7 @@ def handle_backup_time(
         question
     )
 
+
     if len(numbers) < 2 and previous_messages:
 
         for message in reversed(
@@ -700,22 +852,34 @@ def handle_backup_time(
         ):
 
             if message["role"] != "user":
+
                 continue
+
 
             previous_text = (
+
                 message["content"]
                 .lower()
+
             )
+
 
             if (
+
                 "battery" not in previous_text
                 and "backup" not in previous_text
+
             ):
+
                 continue
 
+
             previous_numbers = extract_numbers(
+
                 previous_text
+
             )
+
 
             if len(previous_numbers) >= 2:
 
@@ -723,32 +887,47 @@ def handle_backup_time(
 
                 break
 
+
     if len(numbers) < 2:
 
         return (
+
             "Please provide battery capacity "
             "and load in kW."
+
         )
+
 
     battery_capacity = numbers[0]
 
     load = numbers[1]
 
+
     result = backup_time_tool(
+
         battery_capacity,
+
         load
+
     )
 
+
     return (
+
         "\nBATTERY BACKUP RESULT\n"
         "----------------------------------------\n"
+
         f"Battery Capacity: "
         f"{result['battery_capacity_kwh']} kWh\n"
+
         f"Load: "
         f"{result['load_kw']} kW\n"
+
         f"Estimated Backup Time: "
         f"{result['backup_hours']} hours\n"
+
         "----------------------------------------"
+
     )
 
 
@@ -765,6 +944,7 @@ def handle_inverter_size(
         question
     )
 
+
     if not numbers and previous_messages:
 
         for message in reversed(
@@ -772,23 +952,35 @@ def handle_inverter_size(
         ):
 
             if message["role"] != "user":
+
                 continue
 
+
             previous_text = (
+
                 message["content"]
                 .lower()
+
             )
 
+
             if (
+
                 "load" not in previous_text
                 and "kw" not in previous_text
                 and "inverter" not in previous_text
+
             ):
+
                 continue
 
+
             previous_numbers = extract_numbers(
+
                 previous_text
+
             )
+
 
             if previous_numbers:
 
@@ -796,29 +988,43 @@ def handle_inverter_size(
 
                 break
 
+
     if not numbers:
 
         return (
+
             "Please provide your peak electrical "
             "load in kW."
+
         )
+
 
     peak_load = numbers[0]
 
+
     result = inverter_size_tool(
+
         peak_load
+
     )
 
+
     return (
+
         "\nINVERTER CALCULATION RESULT\n"
         "----------------------------------------\n"
+
         f"Peak Load: "
         f"{result['peak_load_kw']} kW\n"
+
         f"Calculated Inverter Requirement: "
         f"{result['required_inverter_kw']} kW\n"
+
         f"Recommended Inverter Size: "
         f"{result['recommended_inverter_kw']} kW\n"
+
         "----------------------------------------"
+
     )
 
 
@@ -832,7 +1038,9 @@ def handle_system_type(
 
     text = question.lower().strip()
 
+
     grid_available = True
+
 
     unavailable_keywords = [
 
@@ -848,14 +1056,20 @@ def handle_system_type(
 
     ]
 
+
     if any(
+
         keyword in text
+
         for keyword in unavailable_keywords
+
     ):
 
         grid_available = False
 
+
     grid_reliable = True
+
 
     unreliable_keywords = [
 
@@ -873,12 +1087,17 @@ def handle_system_type(
 
     ]
 
+
     if any(
+
         keyword in text
+
         for keyword in unreliable_keywords
+
     ):
 
         grid_reliable = False
+
 
     no_backup_keywords = [
 
@@ -909,12 +1128,18 @@ def handle_system_type(
 
     ]
 
+
     no_backup_required = any(
+
         keyword in text
+
         for keyword in no_backup_keywords
+
     )
 
+
     backup_required = False
+
 
     backup_keywords = [
 
@@ -928,18 +1153,25 @@ def handle_system_type(
 
     ]
 
+
     if any(
+
         keyword in text
+
         for keyword in backup_keywords
+
     ):
 
         backup_required = True
+
 
     if no_backup_required:
 
         backup_required = False
 
+
     battery_required = False
+
 
     battery_keywords = [
 
@@ -951,20 +1183,27 @@ def handle_system_type(
 
     ]
 
+
     if any(
+
         keyword in text
+
         for keyword in battery_keywords
+
     ):
 
         battery_required = True
+
 
     if no_backup_required:
 
         battery_required = False
 
+
     if backup_required:
 
         battery_required = True
+
 
     result = system_type_tool(
 
@@ -978,26 +1217,37 @@ def handle_system_type(
 
     )
 
+
     return (
+
         "\nSYSTEM RECOMMENDATION\n"
         "----------------------------------------\n"
+
         f"Grid Available: "
         f"{'Yes' if grid_available else 'No'}\n"
+
         f"Grid Reliable: "
         f"{'Yes' if grid_reliable else 'No'}\n"
+
         f"Backup Required: "
         f"{'Yes' if backup_required else 'No'}\n"
+
         f"Battery Required: "
         f"{'Yes' if battery_required else 'No'}\n\n"
+
         f"Recommended System: "
         f"{result['system_type']}\n"
+
         f"Reason: "
         f"{result['reason']}\n"
+
         "----------------------------------------\n\n"
+
         "Note: Final system selection should be confirmed "
         "by a qualified solar professional after evaluating "
         "site conditions, electrical loads, grid conditions "
         "and applicable requirements."
+
     )
 
 
@@ -1010,6 +1260,7 @@ def detect_tool(
 ):
 
     text = question.lower().strip()
+
 
     information_phrases = [
 
@@ -1031,14 +1282,20 @@ def detect_tool(
 
     ]
 
+
     is_information_question = any(
+
         phrase in text
+
         for phrase in information_phrases
+
     )
+
 
     if is_information_question:
 
         return None
+
 
     # --------------------------------------------------------
     # SYSTEM
@@ -1078,6 +1335,7 @@ def detect_tool(
 
         return "system"
 
+
     # --------------------------------------------------------
     # BATTERY
     # --------------------------------------------------------
@@ -1100,6 +1358,7 @@ def detect_tool(
     ):
 
         return "battery"
+
 
     # --------------------------------------------------------
     # BACKUP TIME
@@ -1127,6 +1386,7 @@ def detect_tool(
 
         return "backup"
 
+
     # --------------------------------------------------------
     # INVERTER
     # --------------------------------------------------------
@@ -1148,6 +1408,7 @@ def detect_tool(
     ):
 
         return "inverter"
+
 
     # --------------------------------------------------------
     # SOLAR
@@ -1198,6 +1459,7 @@ def detect_tool(
 
         return "solar"
 
+
     return None
 
 
@@ -1214,52 +1476,78 @@ def solar_chat(
 
         previous_messages = []
 
+
     tool = detect_tool(
         question
     )
+
 
     try:
 
         if tool == "solar":
 
             return handle_solar_size(
+
                 question,
+
                 previous_messages
+
             )
+
 
         if tool == "battery":
 
             return handle_battery_size(
+
                 question,
+
                 previous_messages
+
             )
+
 
         if tool == "backup":
 
             return handle_backup_time(
+
                 question,
+
                 previous_messages
+
             )
+
 
         if tool == "inverter":
 
             return handle_inverter_size(
+
                 question,
+
                 previous_messages
+
             )
+
 
         if tool == "system":
 
             return handle_system_type(
+
                 question
+
             )
 
+
         knowledge_context = build_context(
+
             question,
+
             top_k=3
+
         )
 
+
         conversation_context = ""
+
 
         for message in previous_messages:
 
@@ -1271,30 +1559,46 @@ def solar_chat(
 
             )
 
+
         if LLM_PROVIDER == "groq":
 
             return ask_groq(
+
                 question,
+
                 knowledge_context,
+
                 conversation_context
+
             )
 
+
         return ask_ollama(
+
             question,
+
             knowledge_context,
+
             conversation_context
+
         )
+
 
     except requests.exceptions.RequestException as error:
 
         return (
+
             f"Connection error: {error}"
+
         )
+
 
     except Exception as error:
 
         return (
+
             f"Error: {error}"
+
         )
 
 
@@ -1319,25 +1623,42 @@ def chat_with_memory(
 ):
 
     previous_messages = get_messages(
+
         conversation_id
+
     )
 
+
     add_message(
+
         conversation_id,
+
         "user",
+
         question
+
     )
+
 
     answer = solar_chat(
+
         question,
+
         previous_messages
+
     )
 
+
     add_message(
+
         conversation_id,
+
         "assistant",
+
         answer
+
     )
+
 
     return answer
 
@@ -1355,12 +1676,13 @@ if __name__ == "__main__":
     )
 
     print(
-        "STEP 16 - LOCAL OLLAMA + CLOUD GROQ"
+        "STEP 18 - DEPLOYMENT PREPARATION"
     )
 
     print(
         f"LLM Provider: {LLM_PROVIDER}"
     )
+
 
     if LLM_PROVIDER == "groq":
 
@@ -1374,87 +1696,145 @@ if __name__ == "__main__":
             f"Ollama Model: {MODEL}"
         )
 
+
     print("=" * 70)
 
     initialize_database()
 
     conversation_id = create_new_conversation(
+
         "Solar Memory Test"
+
     )
 
+
     print(
+
         f"\nConversation ID: "
         f"{conversation_id}"
+
     )
+
 
     question1 = input(
+
         "\nUser: "
+
     )
+
 
     answer1 = chat_with_memory(
+
         conversation_id,
+
         question1
+
     )
 
+
     print(
+
         "\nSolar Assistant:"
+
     )
 
+
     print(
+
         answer1
+
     )
+
 
     question2 = input(
+
         "\nUser: "
+
     )
+
 
     answer2 = chat_with_memory(
+
         conversation_id,
+
         question2
+
     )
 
+
     print(
+
         "\nSolar Assistant:"
+
     )
 
+
     print(
+
         answer2
+
     )
 
+
     print(
+
         "\n" + "=" * 70
+
     )
 
+
     print(
+
         "SAVED CONVERSATION"
+
     )
 
+
     print(
+
         "=" * 70
+
     )
+
 
     messages = get_messages(
+
         conversation_id
+
     )
+
 
     for message in messages:
 
         print(
+
             f"\n{message['role'].upper()}:"
+
         )
 
         print(
+
             message["content"]
+
         )
 
+
     print(
+
         "\n" + "=" * 70
+
     )
 
-    print(
-        "STEP 16 TEST COMPLETED"
-    )
 
     print(
+
+        "STEP 18 TEST COMPLETED"
+
+    )
+
+
+    print(
+
         "=" * 70
+
     )

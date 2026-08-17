@@ -6,13 +6,22 @@ from chatbot import (
     create_new_conversation
 )
 
+from database import (
+    initialize_database,
+    get_conversations,
+    get_messages,
+    delete_conversation
+)
+
 
 # ============================================================
 # SOLAR INDUSTRY CHATBOT BACKEND
-# STEP 12B - WEB INTERFACE + MEMORY
+# STEP 17 - PERSISTENT CONVERSATION MANAGEMENT
 # ============================================================
 
 app = Flask(__name__)
+
+initialize_database()
 
 
 # ============================================================
@@ -29,20 +38,20 @@ def add_cors_headers(response):
     )
 
     response.headers["Access-Control-Allow-Methods"] = (
-        "GET, POST, OPTIONS"
+        "GET, POST, DELETE, OPTIONS"
     )
 
     return response
 
 
 # ============================================================
-# GLOBAL WEB CONVERSATION
+# CURRENT WEB CONVERSATION
 # ============================================================
 
 conversation_id = None
 
 
-def get_conversation_id():
+def get_current_conversation_id():
 
     global conversation_id
 
@@ -73,7 +82,7 @@ def home():
             "Solar Industry Assistant",
 
         "step":
-            "12B - Web Interface + Memory"
+            "17 - Persistent Conversation Management"
 
     })
 
@@ -92,8 +101,23 @@ def new_conversation():
 
     try:
 
-        conversation_id = create_new_conversation(
+        data = request.get_json(
+            silent=True
+        ) or {}
+
+        title = data.get(
+            "title",
             "Web Solar Assistant"
+        )
+
+        title = str(title).strip()
+
+        if not title:
+
+            title = "Web Solar Assistant"
+
+        conversation_id = create_new_conversation(
+            title
         )
 
         return jsonify({
@@ -103,8 +127,176 @@ def new_conversation():
             "conversation_id":
                 conversation_id,
 
+            "title":
+                title,
+
             "message":
                 "New conversation created."
+
+        })
+
+    except Exception as error:
+
+        return jsonify({
+
+            "success": False,
+
+            "error":
+                str(error)
+
+        }), 500
+
+
+# ============================================================
+# GET ALL CONVERSATIONS
+# ============================================================
+
+@app.route(
+    "/conversations",
+    methods=["GET"]
+)
+def conversations():
+
+    try:
+
+        conversation_list = get_conversations()
+
+        result = []
+
+        for conversation in conversation_list:
+
+            result.append({
+
+                "id":
+                    conversation["id"],
+
+                "title":
+                    conversation["title"],
+
+                "created_at":
+                    conversation["created_at"],
+
+                "updated_at":
+                    conversation["updated_at"]
+
+            })
+
+        return jsonify({
+
+            "success": True,
+
+            "conversations":
+                result
+
+        })
+
+    except Exception as error:
+
+        return jsonify({
+
+            "success": False,
+
+            "error":
+                str(error)
+
+        }), 500
+
+
+# ============================================================
+# GET CONVERSATION MESSAGES
+# ============================================================
+
+@app.route(
+    "/conversation/<int:conversation_id>",
+    methods=["GET"]
+)
+def conversation_messages(
+    conversation_id
+):
+
+    try:
+
+        messages = get_messages(
+            conversation_id
+        )
+
+        result = []
+
+        for message in messages:
+
+            result.append({
+
+                "id":
+                    message["id"],
+
+                "role":
+                    message["role"],
+
+                "content":
+                    message["content"],
+
+                "created_at":
+                    message["created_at"]
+
+            })
+
+        return jsonify({
+
+            "success": True,
+
+            "conversation_id":
+                conversation_id,
+
+            "messages":
+                result
+
+        })
+
+    except Exception as error:
+
+        return jsonify({
+
+            "success": False,
+
+            "error":
+                str(error)
+
+        }), 500
+
+
+# ============================================================
+# DELETE CONVERSATION
+# ============================================================
+
+@app.route(
+    "/conversation/<int:conversation_to_delete>",
+    methods=["DELETE"]
+)
+def remove_conversation(
+    conversation_to_delete
+):
+
+    global conversation_id
+
+    try:
+
+        delete_conversation(
+            conversation_to_delete
+        )
+
+        if conversation_id == conversation_to_delete:
+
+            conversation_id = None
+
+        return jsonify({
+
+            "success": True,
+
+            "conversation_id":
+                conversation_to_delete,
+
+            "message":
+                "Conversation deleted."
 
         })
 
@@ -130,16 +322,19 @@ def new_conversation():
 )
 def chat():
 
+    global conversation_id
+
     if request.method == "OPTIONS":
 
         return jsonify({
             "success": True
         })
 
-
     try:
 
-        data = request.get_json()
+        data = request.get_json(
+            silent=True
+        )
 
         if not data:
 
@@ -153,9 +348,11 @@ def chat():
             }), 400
 
 
-        question = data.get(
-            "question",
-            ""
+        question = str(
+            data.get(
+                "question",
+                ""
+            )
         ).strip()
 
 
@@ -171,18 +368,47 @@ def chat():
             }), 400
 
 
-        # ----------------------------------------------------
-        # Get current conversation
-        # ----------------------------------------------------
-
-        current_conversation_id = (
-            get_conversation_id()
+        requested_conversation_id = (
+            data.get("conversation_id")
         )
 
 
-        # ----------------------------------------------------
-        # Chat with memory
-        # ----------------------------------------------------
+        if requested_conversation_id is not None:
+
+            try:
+
+                requested_conversation_id = int(
+                    requested_conversation_id
+                )
+
+            except (
+                TypeError,
+                ValueError
+            ):
+
+                return jsonify({
+
+                    "success": False,
+
+                    "error":
+                        "conversation_id must be an integer."
+
+                }), 400
+
+            current_conversation_id = (
+                requested_conversation_id
+            )
+
+            conversation_id = (
+                current_conversation_id
+            )
+
+        else:
+
+            current_conversation_id = (
+                get_current_conversation_id()
+            )
+
 
         answer = chat_with_memory(
 
@@ -192,10 +418,6 @@ def chat():
 
         )
 
-
-        # ----------------------------------------------------
-        # Return response
-        # ----------------------------------------------------
 
         return jsonify({
 
@@ -238,7 +460,7 @@ if __name__ == "__main__":
     )
 
     print(
-        "STEP 12B - WEB INTERFACE + MEMORY"
+        "STEP 17 - PERSISTENT CONVERSATION MANAGEMENT"
     )
 
     print("=" * 70)
@@ -253,6 +475,20 @@ if __name__ == "__main__":
 
     print(
         "New conversation: POST /conversation"
+    )
+
+    print(
+        "Conversations: GET /conversations"
+    )
+
+    print(
+        "Conversation messages: "
+        "GET /conversation/<id>"
+    )
+
+    print(
+        "Delete conversation: "
+        "DELETE /conversation/<id>"
     )
 
     print("=" * 70)
