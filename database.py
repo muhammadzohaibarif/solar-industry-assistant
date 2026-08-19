@@ -173,6 +173,38 @@ def add_message(
 
 
 # ============================================================
+# UPDATE CONVERSATION TITLE
+# ============================================================
+
+def update_conversation_title(
+    conversation_id,
+    title
+):
+
+    connection = get_connection()
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE conversations
+
+        SET title = ?
+
+        WHERE id = ?
+        """,
+        (
+            title,
+            conversation_id
+        )
+    )
+
+    connection.commit()
+
+    connection.close()
+
+
+# ============================================================
 # GET CONVERSATION MESSAGES
 # ============================================================
 
@@ -188,6 +220,7 @@ def get_messages(
         """
         SELECT
             id,
+            conversation_id,
             role,
             content,
             created_at
@@ -211,7 +244,7 @@ def get_messages(
 
 
 # ============================================================
-# GET ALL CONVERSATIONS
+# GET CONVERSATIONS
 # ============================================================
 
 def get_conversations():
@@ -253,6 +286,10 @@ def delete_conversation(
 
     cursor = connection.cursor()
 
+    # --------------------------------------------------------
+    # Delete messages belonging to conversation
+    # --------------------------------------------------------
+
     cursor.execute(
         """
         DELETE FROM messages
@@ -263,6 +300,10 @@ def delete_conversation(
             conversation_id,
         )
     )
+
+    # --------------------------------------------------------
+    # Delete conversation
+    # --------------------------------------------------------
 
     cursor.execute(
         """
@@ -275,88 +316,19 @@ def delete_conversation(
         )
     )
 
+    deleted = (
+        cursor.rowcount > 0
+    )
+
     connection.commit()
 
     connection.close()
 
+    return deleted
+
 
 # ============================================================
-# DATABASE TEST
+# INITIALIZE DATABASE
 # ============================================================
 
-if __name__ == "__main__":
-
-    print("=" * 70)
-
-    print(
-        "SOLAR INDUSTRY CHATBOT"
-    )
-
-    print(
-        "STEP 11A - DATABASE TEST"
-    )
-
-    print("=" * 70)
-
-    initialize_database()
-
-    conversation_id = create_conversation(
-        "Solar Test Conversation"
-    )
-
-    add_message(
-        conversation_id,
-        "user",
-        "I use 300 kWh per month."
-    )
-
-    add_message(
-        conversation_id,
-        "assistant",
-        "Your estimated solar capacity is approximately 2.5 kW."
-    )
-
-    messages = get_messages(
-        conversation_id
-    )
-
-    print(
-        "\nCONVERSATION ID:"
-    )
-
-    print(
-        conversation_id
-    )
-
-    print(
-        "\nMESSAGES:"
-    )
-
-    print("-" * 70)
-
-    for message in messages:
-
-        print(
-            f"{message['role'].upper()}: "
-            f"{message['content']}"
-        )
-
-    print("-" * 70)
-
-    conversations = get_conversations()
-
-    print(
-        "\nTOTAL CONVERSATIONS:"
-    )
-
-    print(
-        len(conversations)
-    )
-
-    print("=" * 70)
-
-    print(
-        "STEP 11A TEST COMPLETED"
-    )
-
-    print("=" * 70)
+initialize_database()

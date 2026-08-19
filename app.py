@@ -68,14 +68,14 @@ def get_conversations():
     return []
 
 
-def create_conversation():
+def create_conversation(title="Solar Conversation"):
 
     try:
 
         response = requests.post(
             f"{BACKEND_BASE_URL}/conversation",
             json={
-                "title": "New Solar Conversation"
+                "title": title
             },
             timeout=10
         )
@@ -132,39 +132,6 @@ def load_conversation(
         )
 
     return []
-
-
-def delete_conversation(
-    conversation_id
-):
-
-    try:
-
-        response = requests.delete(
-
-            f"{BACKEND_BASE_URL}/conversation/"
-            f"{conversation_id}",
-
-            timeout=10
-
-        )
-
-        response.raise_for_status()
-
-        data = response.json()
-
-        return data.get(
-            "success",
-            False
-        )
-
-    except Exception as error:
-
-        st.error(
-            f"Could not delete conversation: {error}"
-        )
-
-    return False
 
 
 def send_message(
@@ -253,31 +220,6 @@ with st.sidebar:
 
 
     # --------------------------------------------------------
-    # NEW CHAT
-    # --------------------------------------------------------
-
-    if st.button(
-        "➕ New Chat",
-        use_container_width=True
-    ):
-
-        new_id = create_conversation()
-
-        if new_id is not None:
-
-            st.session_state.conversation_id = (
-                new_id
-            )
-
-            st.session_state.messages = []
-
-            st.rerun()
-
-
-    st.divider()
-
-
-    # --------------------------------------------------------
     # CONVERSATION HISTORY
     # --------------------------------------------------------
 
@@ -349,57 +291,6 @@ with st.sidebar:
                 st.rerun()
 
 
-            # ------------------------------------------------
-            # DELETE CONVERSATION
-            # ------------------------------------------------
-
-            if st.button(
-
-                "🗑️ Delete",
-
-                key=f"delete_{conversation_id}",
-
-                use_container_width=True
-
-            ):
-
-                deleted = delete_conversation(
-                    conversation_id
-                )
-
-                if deleted:
-
-                    if (
-                        st.session_state.conversation_id
-                        == conversation_id
-                    ):
-
-                        st.session_state.conversation_id = (
-                            None
-                        )
-
-                        st.session_state.messages = []
-
-                    st.rerun()
-
-
-    st.divider()
-
-
-    # --------------------------------------------------------
-    # CLEAR CURRENT CHAT
-    # --------------------------------------------------------
-
-    if st.button(
-        "🧹 Clear Current Chat",
-        use_container_width=True
-    ):
-
-        st.session_state.messages = []
-
-        st.rerun()
-
-
 # ============================================================
 # HEADER
 # ============================================================
@@ -421,7 +312,9 @@ st.caption(
 
 if st.session_state.conversation_id is None:
 
-    new_id = create_conversation()
+    new_id = create_conversation(
+        "New Solar Conversation"
+    )
 
     if new_id is not None:
 
@@ -521,6 +414,15 @@ if question:
             answer
 
     })
+
+
+    # --------------------------------------------------------
+    # REFRESH CONVERSATION LIST
+    # --------------------------------------------------------
+
+    st.session_state.conversations = (
+        get_conversations()
+    )
 
 
     st.rerun()
